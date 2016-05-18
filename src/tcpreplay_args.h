@@ -12,6 +12,9 @@ typedef struct arguments {
 } arguments;
 
 
-int tcpreplay_args_init(int argc, char *argv[]);
+int tcpreplay_args_init(struct arguments* args, int argc, char *argv[]);
+
+int tcpreplay_args_check(struct arguments* args);
+
 
 #endif /**end ifndef __TCPREPLAY_ARGS_H__*/

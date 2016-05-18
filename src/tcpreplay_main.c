@@ -8,12 +8,11 @@
 
 #include "tcpreplay_args.h"
 
-struct arguments argument;
-
 int main(int argc, char *argv[])
 {
     printf("the tcpreplay begin run......\n");
     int ret;
+    struct arguments argument;
 
     /** Init DPDK Environment Abstraction Layer (EAL)*/
     ret = rte_eal_init(argc, argv);
@@ -26,6 +25,10 @@ int main(int argc, char *argv[])
     /** Init Tcpreplay Args*/
     (void)memset(&argument, 0, sizeof(struct arguments));
     ret = tcpreplay_args_init(&argument, argc, argv);
+    if (ret < 0)
+        rte_exit(EXIT_FAILURE, "Tcpreplay Args Init Error, will exit\n");
+
+    ret = tcpreplay_args_check(&argument);
     if (ret < 0)
         rte_exit(EXIT_FAILURE, "Tcpreplay Args Init Error, will exit\n");
     return 0;
