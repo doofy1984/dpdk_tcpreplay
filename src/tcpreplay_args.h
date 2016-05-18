@@ -1,5 +1,13 @@
 #ifndef __TCPREPLAY_ARGS_H__
 #define __TCPREPLAY_ARGS_H__
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+#include <stdint.h>
+#include <stdbool.h>
+#include <signal.h>
+#include <argp.h>
+#include <inttypes.h>
 
 /* This structure is used by main to communicate with parse_opt. */
 typedef struct arguments {

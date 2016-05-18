@@ -1,10 +1,16 @@
 #include <stdio.h>
-#include <argp.h>
 #include <string.h>
+#include <stdlib.h>
+#include <stdint.h>
+#include <stdbool.h>
+#include <signal.h>
+#include <argp.h>
+#include <inttypes.h>
 
 #include <rte_log.h>
 
 #include "tcpreplay_args.h"
+#include "tcpreplay_log.h"
 
 const char *argp_program_version = "tcpreplay 1.0";
 
@@ -24,16 +30,16 @@ parse_opt (int key, char *arg, struct argp_state *state)
     switch (key) {
         case 'p':
             /* parse hexadecimal string */
-            arg->port_mask = strtoul(args, &end, 16);
+            args->port_mask = strtoul(arg, &end, 16);
             if (errno != 0 || *end != '\0' ||
                     (args->port_mask == ULONG_MAX && errno == ERANGE)) {
-                RTE_LOG(ERR, DPDKCAP, "Invalid portmask '%s' (could not convert to "\
+                rte_log(RTE_LOG_ERR, TCPREPLAY_LOG_TYPE, "Invalid portmask '%s' (could not convert to "\
                     "unsigned long)\n", arg);
-                return EINVAL;
+                return RET_ERROR;
             }
             if (args->port_mask == 0) {
-                    RTE_LOG(ERR, DPDKCAP, "Invalid portmask '%s', no port used\n", arg);
-                return EINVAL;
+                    rte_log(RTE_LOG_ERR, TCPREPLAY_LOG_TYPE, "Invalid portmask '%s', no port used\n", arg);
+                return RET_ERROR;
             }
             break;
         case 'f':
@@ -56,13 +62,12 @@ parse_opt (int key, char *arg, struct argp_state *state)
         case 'l':
             /* parse logs_file string */
             if (arg)
-                args->logs_file= atrdup(arg);
+                args->logs_file= strdup(arg);
             break;
         default:
-            RTE_LOG(ERR, DPDKCAP, "unkonw args '%s'\n", arg);
-            return ARGP_ERR_UNKNOWN;
+            return RET_ERROR;
     }
-    return 0;
+    return RET_SUCCESS;
 }
 
 int tcpreplay_args_init(struct arguments* args, int argc, char *argv[])
@@ -98,7 +103,7 @@ int tcpreplay_args_init(struct arguments* args, int argc, char *argv[])
     /*
      *  The ARGP structure itself.
      *  */
-    static struct argp argp = {options, parse_opt, args_doc, doc};
+    static struct argp arg = {options, parse_opt, args_doc, doc, 0, 0, 0};
 
     /* Set argument defaults */
     args->port_mask  = 0;
@@ -109,11 +114,15 @@ int tcpreplay_args_init(struct arguments* args, int argc, char *argv[])
     args->per_port_cores_num = 1;
 
     /* parse the args*/
-    return argp_parse(&argp, argc, argv, 0, 0, args);
+    argp_parse(&arg, argc, argv, 0, 0, args);
+
+    return RET_SUCCESS;
 }
 
 int tcpreplay_args_check(struct arguments* args)
 {
-    return 1;
+    if (args)
+        return RET_SUCCESS;
+    return RET_SUCCESS;
 }
 
