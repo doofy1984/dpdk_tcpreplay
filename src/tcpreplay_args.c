@@ -14,12 +14,12 @@ const char *argp_program_bug_address = "<chenchong0617@gmail.com>";
  */
 static struct
 argp_option options[] = {
-  { "port_mask",           'p',  "FILE",               0, "The core where to bind the program ", 0 },
-  { "pcap_file",           'f',  0,                    0, "The pcap file path", 0 },
-  { "per_port_cores_num",  'c',  "FILE",               0, "Number of cores per port used for send packet (default: 1)", 0 },
-  { "send_times",          't',  "NB_CORES_PER_PORT",  0, "Send pcap file packet times (default: 1)", 0 },
-  { "send_speed",          's',  "NB_CORES",           0, "Send packets speed (default MAX speed)", 0 },
-  { "logs_file",           'l',   "T",                 0, "Writes the logs into FILE instead of stderr", 0},
+  { "port_mask",           'p',  "PORT_MASK",          0, "The core where to bind the program ", 0 },
+  { "pcap_file",           'f',  "PCAP_FILE",          0, "The pcap file path", 0 },
+  { "per_port_cores_num",  'c',  "NB_CORES_PER_PORT",  0, "Number of cores per port used for send packet (default: 1)", 0 },
+  { "send_times",          't',  "SEND_TIMES",         0, "Send pcap file packet times (default: 1)", 0 },
+  { "send_speed",          's',  "SEND_SPEED",         0, "Send packets speed (default MAX speed)", 0 },
+  { "logs_file",           'l',  "LOGS_FILE",          0, "Writes the logs into FILE instead of stderr", 0},
   { 0 } };
 
 
