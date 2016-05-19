@@ -24,5 +24,6 @@ int tcpreplay_args_init(struct arguments* args, int argc, char *argv[]);
 
 int tcpreplay_args_check(struct arguments* args);
 
+struct arguments* tcpreplay_get_args(void);
 
 #endif /**end ifndef __TCPREPLAY_ARGS_H__*/

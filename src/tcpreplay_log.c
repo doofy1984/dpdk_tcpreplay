@@ -7,12 +7,12 @@
 #include "tcpreplay_args.h"
 #include "tcpreplay_log.h"
 
-FILE * log_fd;
-
 int
 tcpreplay_log_init(struct arguments* args)
 {
-    int ret = 0;
+    int ret = 0;    
+    FILE * log_fd;
+    
     /* Set log level */
     rte_set_log_type(TCPREPLAY_LOG_TYPE, 1);
     rte_set_log_level(RTE_LOG_DEBUG);

@@ -12,6 +12,8 @@
 #include "tcpreplay_args.h"
 #include "tcpreplay_log.h"
 
+struct arguments argument;
+
 const char *argp_program_version = "tcpreplay 1.0";
 
 const char *argp_program_bug_address = "<chenchong0617@gmail.com>";
@@ -70,7 +72,8 @@ parse_opt (int key, char *arg, struct argp_state *state)
     return RET_SUCCESS;
 }
 
-int tcpreplay_args_init(struct arguments* args, int argc, char *argv[])
+int
+tcpreplay_args_init(struct arguments* args, int argc, char *argv[])
 {
     /*
      *  OPTIONS.  Field 1 in ARGP.
@@ -119,10 +122,18 @@ int tcpreplay_args_init(struct arguments* args, int argc, char *argv[])
     return RET_SUCCESS;
 }
 
-int tcpreplay_args_check(struct arguments* args)
+int
+tcpreplay_args_check(struct arguments* args)
 {
     if (args)
         return RET_SUCCESS;
     return RET_SUCCESS;
 }
+
+struct arguments*
+tcpreplay_get_args(void)
+{
+    return &argument;
+}
+
 
