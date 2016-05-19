@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include <rte_ethdev.h>
+
 #include "tcpreplay_log.h"
 #include "tcpreplay_args.h"
 #include "tcpreplay_global.h"

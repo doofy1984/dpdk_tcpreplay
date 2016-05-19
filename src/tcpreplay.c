@@ -10,6 +10,8 @@
 #include "tcpreplay_log.h"
 #include "tcpreplay_global.h"
 #include "tcpreplay_netport.h"
+#include "tcpreplay_send.h"
+#include "tcpreplay_pcap.h"
 
 int main(int argc, char *argv[])
 {
@@ -50,6 +52,34 @@ int main(int argc, char *argv[])
     ret = tcpreplay_netport_init(args);
     if (ret == RET_ERROR)
         rte_exit(EXIT_FAILURE, "Tcpreplay Netport Init Error, will exit\n");
+
+    /** Create Tcpreplay Send Mempool*/
+    ret = tcpreplay_sendpool_create(args);
+    if (ret == RET_ERROR)
+        rte_exit(EXIT_FAILURE, "Tcpreplay Sendpool Create Error, will exit\n");
+
+    /** Create Tcpreplay Rings*/
+    ret = tcpreplay_ring_create(args);
+    if (ret == RET_ERROR)
+        rte_exit(EXIT_FAILURE, "Tcpreplay Ring Create Error, will exit\n");
+
+    /** Start Reader Cores*/
+    ret = tcpreplay_reader_start();
+    if (ret == RET_ERROR)
+        rte_exit(EXIT_FAILURE, "Tcpreplay Reader Start Error, will exit\n");
+
+    /** Start Sender Cores*/
+    ret = tcpreplay_sender_start();
+    if (ret == RET_ERROR)
+        rte_exit(EXIT_FAILURE, "Tcpreplay Sender Start Error, will exit\n");
+
+    /** Start Display Stats Cores*/
+    ret = tcpreplay_display_start();
+    if (ret = RET_ERROR)
+        rte_exit(EXIT_FAILURE, "Tcpreplay Display Start Error, will exit\n");
+
+    /** Free arguments*/
+    (void)tcpreplay_free_args(args);
     
-    return 0;
+    return RET_SUCCESS;
 }

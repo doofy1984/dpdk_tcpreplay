@@ -37,11 +37,11 @@ parse_opt (int key, char *arg, struct argp_state *state)
                     (args->port_mask == ULONG_MAX && errno == ERANGE)) {
                 rte_log(RTE_LOG_ERR, TCPREPLAY_LOG_TYPE, "Invalid portmask '%s' (could not convert to "\
                     "unsigned long)\n", arg);
-                return RET_ERROR;
+                return EINVAL;
             }
             if (args->port_mask == 0) {
                     rte_log(RTE_LOG_ERR, TCPREPLAY_LOG_TYPE, "Invalid portmask '%s', no port used\n", arg);
-                return RET_ERROR;
+                return EINVAL;
             }
             break;
         case 'f':
@@ -67,7 +67,7 @@ parse_opt (int key, char *arg, struct argp_state *state)
                 args->logs_file= strdup(arg);
             break;
         default:
-            return RET_ERROR;
+            return ARGP_ERR_UNKNOWN;
     }
     return RET_SUCCESS;
 }
@@ -128,6 +128,18 @@ tcpreplay_args_check(struct arguments* args)
     if (args)
         return RET_SUCCESS;
     return RET_SUCCESS;
+}
+
+void
+tcpreplay_free_args(struct arguments* args)
+{
+    if (!args)
+        return;
+
+    if (args->logs_file)
+        free(args->logs_file);
+    if (args->pcap_file)
+        free(args->pcap_file);
 }
 
 struct arguments*
